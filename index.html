@@ -511,6 +511,8 @@
         }
 
         function sendVoteData(userId, category, transportMode, preferableQuadrant, probableQuadrant) {
+            savedItems.push({ userId, category, transportMode, preferableQuadrant, probableQuadrant });
+            totalItems = savedItems.length;
             const data = {
                 userId,
                 category,
