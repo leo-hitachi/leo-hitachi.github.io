@@ -539,10 +539,13 @@
         }
 
         function loadVoteData() {
+            savedItems = [];
             fetch(googleSheetApiUrl)
             .then(response => response.json())
             .then(data => {
-                console.log('Retrieved data:', data);
+$1console.log('Retrieved data:', data);
+$1savedItems = data;
+$1totalItems = savedItems.length;
                 // Use the data to calculate percentages and update the UI
                 calculateAndDisplayPercentages(data);
             })
@@ -584,90 +587,6 @@
             };
 
             // Now use these percentages to update your UI (e.g., percentage circles)
-        }
-
-        function addClearLocalStorageButton() {
-            // Check if the container for buttons already exists to avoid duplicating it
-            let buttonContainer = document.getElementById('buttonContainer');
-            if (!buttonContainer) {
-                // Create a container for the buttons
-                buttonContainer = document.createElement('div');
-                buttonContainer.id = 'buttonContainer';
-                buttonContainer.style.position = 'fixed';
-                buttonContainer.style.bottom = '20px';
-                buttonContainer.style.left = '50%';
-                buttonContainer.style.transform = 'translateX(-50%)';
-                buttonContainer.style.display = 'flex';
-                buttonContainer.style.gap = '10px'; // Space between buttons
-                buttonContainer.style.zIndex = '100'; // Ensure the container is on top
-
-                // Append the container to the body
-                document.body.appendChild(buttonContainer);
-            }
-
-            // Create the Reset button if it doesn't exist
-            if (!document.getElementById('clearLocalStorageButton')) {
-                const clearButton = document.createElement('button');
-                clearButton.id = 'clearLocalStorageButton';
-                clearButton.textContent = 'Reset';
-                clearButton.style.padding = '10px 20px';
-                clearButton.style.fontSize = '16px';
-                clearButton.style.cursor = 'pointer';
-
-                // Add click event to clear local storage with confirmation
-                clearButton.onclick = function() {
-                    if (confirm('Are you sure you want to reset all saved items? This action cannot be undone.')) {
-                        localStorage.clear();
-                        alert('All saved items have been cleared.');
-                        // Refresh the page after saving
-                        location.reload();
-                    }
-                };
-
-                // Append the Reset button to the container
-                buttonContainer.appendChild(clearButton);
-            }
-
-            // Create the Download button if it doesn't exist
-            if (!document.getElementById('downloadLocalStorageButton')) {
-                const downloadButton = document.createElement('button');
-                downloadButton.id = 'downloadLocalStorageButton';
-                downloadButton.textContent = 'Download';
-                downloadButton.style.padding = '10px 20px';
-                downloadButton.style.fontSize = '16px';
-                downloadButton.style.cursor = 'pointer';
-
-                // Add click event to download local storage data
-                downloadButton.onclick = function() {
-                    downloadLocalStorageData();
-                };
-
-                // Append the Download button to the container
-                buttonContainer.appendChild(downloadButton);
-            }
-        }
-
-        function removeClearLocalStorageButton() {
-            const clearButton = document.getElementById('clearLocalStorageButton');
-            if (clearButton) {
-                clearButton.remove(); // Remove the button from the DOM
-            }
-
-            const downloadButton = document.getElementById('downloadLocalStorageButton');
-            if (downloadButton) {
-                downloadButton.remove(); // Remove the Download button from the DOM
-            }
-        }
-
-        function downloadLocalStorageData() {
-            const savedItems = JSON.parse(localStorage.getItem('savedItems')) || [];
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedItems, null, 2));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "saved_data.json");
-            document.body.appendChild(downloadAnchorNode); // Required for Firefox
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
         }
     
         function showCategories() {
@@ -1110,20 +1029,14 @@
         window.addEventListener('resize', () => {
             positionCategories();
         });
-
-        function loadSavedItems() {
-            const savedItems = JSON.parse(localStorage.getItem('savedItems')) || [];
-            console.log(savedItems); // Display saved items in the console or update your UI
-        }
-    
+   
         // Function to initialize event listeners after page loads
         window.onload = function() {
             // Initialize by showing categories when needed                                    
             addCategoryClickListeners();
             handleLoadedScenarios(scenarios);
             loadVoteData();
-            showPercentages();
-            addClearLocalStorageButton()
+            showPercentages();            
         };
     
         function showLinesAndCircles() {
