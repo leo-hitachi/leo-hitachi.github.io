@@ -485,8 +485,6 @@
             "Bicycles"
         ];
 
-        const googleSheetApiUrl = 'https://script.google.com/macros/s/AKfycbzNvlEDVkLzF_DfGvHyIrfzatiecz_a2Rq2aACsRUsZjfnM4_wbs_bES_GdZuxDeRgbug/exec';
-
         function handleLoadedScenarios(scenarios) {
             console.log('Scenarios:', scenarios);
             // Your logic to manipulate or display scenarios
@@ -508,82 +506,6 @@
                 currentState = 3;
                 removeClearLocalStorageButton(); // Remove button when transitioning to state 3        
             }
-        }
-
-        function sendVoteData(userId, category, transportMode, preferableQuadrant, probableQuadrant) {
-            const data = {
-                userId,
-                category,
-                transportMode,
-                preferableQuadrant,
-                probableQuadrant,
-            };
-
-            fetch(googleSheetApiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('Thank you, your vote has been registered!');
-                location.reload();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('An error occurred while saving your vote. Please try again.');
-            });
-        }
-
-        function loadVoteData() {
-            fetch(googleSheetApiUrl)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Retrieved data:', data);
-                // Use the data to calculate percentages and update the UI
-                calculateAndDisplayPercentages(data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        }
-
-        function calculateAndDisplayPercentages(voteData) {
-            // Calculate and display the preferable and probable percentages based on voteData
-            // voteData is the array of rows retrieved from Google Sheets
-            const totalVotes = voteData.length;
-            const probableCounts = {1: 0, 2: 0, 3: 0, 4: 0};
-            const preferableCounts = {1: 0, 2: 0, 3: 0, 4: 0};
-
-            voteData.forEach(row => {
-                const probableQuadrant = row[5];
-                const preferableQuadrant = row[4];
-                if (probableQuadrant) {
-                    probableCounts[probableQuadrant]++;
-                }
-                if (preferableQuadrant) {
-                    preferableCounts[preferableQuadrant]++;
-                }
-            });
-
-            const probablePercentages = {
-                1: totalVotes > 0 ? Math.round((probableCounts[1] / totalVotes) * 100) : 0,
-                2: totalVotes > 0 ? Math.round((probableCounts[2] / totalVotes) * 100) : 0,
-                3: totalVotes > 0 ? Math.round((probableCounts[3] / totalVotes) * 100) : 0,
-                4: totalVotes > 0 ? Math.round((probableCounts[4] / totalVotes) * 100) : 0,
-            };
-
-            const preferablePercentages = {
-                1: totalVotes > 0 ? Math.round((preferableCounts[1] / totalVotes) * 100) : 0,
-                2: totalVotes > 0 ? Math.round((preferableCounts[2] / totalVotes) * 100) : 0,
-                3: totalVotes > 0 ? Math.round((preferableCounts[3] / totalVotes) * 100) : 0,
-                4: totalVotes > 0 ? Math.round((preferableCounts[4] / totalVotes) * 100) : 0,
-            };
-
-            // Now use these percentages to update your UI (e.g., percentage circles)
         }
 
         function addClearLocalStorageButton() {
@@ -814,7 +736,17 @@
                 if (!preferableSelected || !probableSelected) {
                     alert("Please select both a 'preferable' and 'probable' story.");
                 } else {
-                    sendVoteData(userId, selectedCategory, selectedTransportMode, preferableQuadrant, probableQuadrant);        
+                    // Save the selected data to local storage
+                    const savedItems = JSON.parse(localStorage.getItem('savedItems')) || [];
+                    const newItem = {
+                        category: selectedCategory,
+                        transportMode: selectedTransportMode,
+                        preferableQuadrant: preferableQuadrant,
+                        probableQuadrant: probableQuadrant
+                    };
+
+                    savedItems.push(newItem);
+                    localStorage.setItem('savedItems', JSON.stringify(savedItems));
                     
                     // Display thank you message
                     alert("Thank you, your vote has been registered!");
@@ -1121,7 +1053,7 @@
             // Initialize by showing categories when needed                                    
             addCategoryClickListeners();
             handleLoadedScenarios(scenarios);
-            loadVoteData();
+            loadSavedItems();            
             showPercentages();
             addClearLocalStorageButton()
         };
