@@ -594,7 +594,7 @@
     
         function showCategories() {
             const categoriesCircle = document.getElementById('categoriesCircle');
-            categoriesCircle.innerHTML = 'Which category would describe you best?'; // Clear existing content
+            categoriesCircle.innerHTML = 'From what perspective would you like<br/>to look into the future of Mobility?'; // Clear existing content
     
             // Hide the axis lines and labels
             document.getElementById('lines').style.display = 'none';
@@ -926,7 +926,7 @@
 
             // Show the transport mode selection text
             const transportText = document.getElementById('transportText');
-            transportText.innerHTML = "Select the transport mode<br/>that interests you";            
+            transportText.innerHTML = "What transport mode<br/>are you interested in exploring?";            
             transportText.style.padding = "10px"; // Optional: Add padding
             transportText.style.width = "400px"; // Set width to 400px
             transportText.style.margin = "0 auto"; // Center the text box horizontally
@@ -1011,7 +1011,7 @@
                 const radius = 400; // Distance from center to categories, adjust as needed
 
                 const categoriesCircle = document.getElementById('categoriesCircle');
-                categoriesCircle.innerHTML = 'Which category would describe you best?'; // Clear existing content
+                categoriesCircle.innerHTML = 'From what perspective would you like<br/>to look into the future of Mobility?'; // Clear existing content
 
                 categories.forEach((category, index) => {
                     const angle = (index / categories.length) * (2 * Math.PI); // Calculate the angle for each category
