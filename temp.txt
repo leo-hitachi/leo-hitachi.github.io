@@ -1,5 +1,0 @@
-Deployment ID
-AKfycbzNvlEDVkLzF_DfGvHyIrfzatiecz_a2Rq2aACsRUsZjfnM4_wbs_bES_GdZuxDeRgbug
-
-URL
-https://script.google.com/macros/s/AKfycbzNvlEDVkLzF_DfGvHyIrfzatiecz_a2Rq2aACsRUsZjfnM4_wbs_bES_GdZuxDeRgbug/exec
